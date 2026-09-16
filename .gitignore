@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+mlruns/
+extracted_data/*.csv
+data/*.csv
+monitoring/reports/*.html
+.DS_Store
+venv/
+.venv/
+env/
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/

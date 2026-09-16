@@ -13,8 +13,8 @@ class DataLoader(ABC):
     Abstract interface for data loaders.
     """
     @abstractmethod # type: ignore
-    def load(self, path: str) -> pd.DataFrame:
-        """Load data from path and return DataFrame."""
+    def load(self, path: str, nrows: int | None = None) -> pd.DataFrame:
+        """Load data from path and return DataFrame. nrows=None loads all rows."""
         ...
 
     @abstractmethod # type: ignore
@@ -40,13 +40,13 @@ class CSVLoader(DataLoader):
         if not path.endswith(self.Extension):
             raise FileNotFoundError(f"File not found: {path}")
 
-    def load(self, path: str) -> pd.DataFrame:
+    def load(self, path: str, nrows: int | None = None) -> pd.DataFrame:
         """
         Load data from a CSV file and return a DataFrame.
         """
         self.validate(path)
         print(f"Loading data from {path}...")
-        df = pd.read_csv(path)
+        df = pd.read_csv(path, nrows=nrows)
         print(f"Data loaded successfully. Shape: {df.shape}")
         return df
 
@@ -66,13 +66,15 @@ class ParquetLoader(DataLoader):
         if not path.endswith(self.Extension):
             raise FileNotFoundError(f"File not found: {path}")
 
-    def load(self, path: str) -> pd.DataFrame:
+    def load(self, path: str, nrows: int | None = None) -> pd.DataFrame:
         """
         Load data from a Parquet file and return a DataFrame.
         """
         self.validate(path)
         print(f"Loading data from {path}...")
         df = pd.read_parquet(path)
+        if nrows is not None:
+            df = df.head(nrows)
         print(f"Data loaded successfully. Shape: {df.shape}")
         return df
 
@@ -92,13 +94,15 @@ class JSONLoader(DataLoader):
         if not path.endswith(self.Extension):
             raise FileNotFoundError(f"File not found: {path}")
 
-    def load(self, path: str) -> pd.DataFrame:
+    def load(self, path: str, nrows: int | None = None) -> pd.DataFrame:
         """
         Load data from a JSON file and return a DataFrame.
         """
         self.validate(path)
         print(f"Loading data from {path}...")
         df = pd.read_json(path)
+        if nrows is not None:
+            df = df.head(nrows)
         print(f"Data loaded successfully. Shape: {df.shape}")
         return df
 
