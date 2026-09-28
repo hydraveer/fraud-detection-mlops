@@ -5,10 +5,11 @@ from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_
 import mlflow.sklearn
 import mlflow
 import time
+import os
 
 app = FastAPI(title="Fraud Detection API")
 
-mlflow.set_tracking_uri("http://localhost:5001")
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5001"))
 model = mlflow.sklearn.load_model("models:/FraudDetector@champion")
 
 # Prometheus metrics
